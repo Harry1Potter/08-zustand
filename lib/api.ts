@@ -14,7 +14,6 @@ function getAuthHeader() {
 const getQueryClient = cache(() => new QueryClient());
 export default getQueryClient;
 
-//==========================================================
 
 export interface NotesResponse {
   notes: Note[];
@@ -31,7 +30,6 @@ export interface FetchNotesParams {
   perPage?: number;
 }
 
-// ✅ оновлений fetchNotes без 400 Bad Request
 export const fetchNotes = async ({
   search = "",
   tag = "all",
@@ -62,7 +60,6 @@ export const fetchNotes = async ({
   };
 };
 
-//==========================================================
 
 export const addNote = async (noteData: NewNoteData): Promise<Note> => {
   const res = await axios.post<Note>("/notes", noteData, {

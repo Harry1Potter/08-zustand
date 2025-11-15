@@ -1,5 +1,24 @@
+import type { Metadata } from "next";
 import React from "react";
 import css from "./Home.module.css";
+
+export const metadata: Metadata = {
+  title: "NoteHub — Сторінку не знайдено",
+  description: "Сторінка не існує або була видалена.",
+
+  openGraph: {
+    title: "NoteHub — 404 Сторінку не знайдено",
+    description: "Сторінка не існує або була видалена.",
+    url: "/not-found",
+    images: [
+      "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
+    ],
+  },
+
+  alternates: {
+    canonical: "/not-found",
+  },
+};
 
 const NotFound = () => {
   return (
@@ -13,3 +32,4 @@ const NotFound = () => {
 };
 
 export default NotFound;
+

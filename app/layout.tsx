@@ -2,15 +2,37 @@
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
+import { Metadata } from "next";
+import { Roboto } from 'next/font/google';
 
-export const metadata = {
-  title: "NoteHub",
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-roboto',
+  display: 'swap',
+});
+
+
+export const metadata: Metadata = {
+  title: "NoteHub — Швидкі нотатки",
+  description:
+    "NoteHub — застосунок для створення, пошуку та організації нотаток за тегами.",
+
+  openGraph: {
+    title: "NoteHub — Швидкі нотатки",
+    description:
+      "NoteHub — застосунок для створення, пошуку та організації нотаток за тегами.",
+    url: "/",
+    images: [
+      "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
+    ],
+  },
 };
 
 export default function RootLayout({ children, modal }: { children: React.ReactNode, modal: React.ReactNode}) {
   return (
     <html lang="en">
-      <body>
+      <body className={roboto.variable}>
         <TanStackProvider>
           <Header />
           {children}
