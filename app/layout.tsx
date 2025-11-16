@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "NoteHub — Швидкі нотатки",
     description:
       "NoteHub — застосунок для створення, пошуку та організації нотаток за тегами.",
-    url: "/",
+    url: "https://08-zustand-oom2xdb7h-harry1potters-projects.vercel.app/",
     images: [
       "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
     ],

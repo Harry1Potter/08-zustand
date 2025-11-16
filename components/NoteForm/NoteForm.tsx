@@ -1,58 +1,75 @@
 "use client";
 
-import { addNote } from "@/lib/api";
 import css from "./NoteForm.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNoteStore, initialDraft, NoteTag } from "@/lib/store/noteStore";
 import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addNote } from "@/lib/api";
 
 export default function NoteForm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const draft = useNoteStore((state) => state.draft);
   const setDraft = useNoteStore((state) => state.setDraft);
   const clearDraft = useNoteStore((state) => state.clearDraft);
 
-  const [formData, setFormDataState] = useState(() => {
+  const [formData, setFormDataState] = useState(initialDraft);
+
+  useEffect(() => {
     const hasDraft =
       draft.title.trim() !== "" || draft.content.trim() !== "";
-    return hasDraft ? draft : initialDraft;
-  });
 
-  const [isPending, setIsPending] = useState(false);
+    setFormDataState(hasDraft ? draft : initialDraft);
+  }, []);
 
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) {
     const { name, value } = e.target;
     const updated = { ...formData, [name]: value };
     setFormDataState(updated);
+
     setDraft({ [name]: value } as Partial<typeof draft>);
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setIsPending(true);
+  const mutation = useMutation({
+    mutationFn: (newNote: {
+      title: string;
+      content: string;
+      tag: NoteTag;
+    }) => addNote(newNote),
 
-    try {
-      await addNote({
-        title: formData.title,
-        content: formData.content,
-        tag: formData.tag as NoteTag,
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
 
       clearDraft();
       router.back();
-    } catch (err) {
+    },
+
+    onError: (err) => {
       console.error("Failed to create note:", err);
-    } finally {
-      setIsPending(false);
-    }
+    },
+  });
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    mutation.mutate({
+      title: formData.title,
+      content: formData.content,
+      tag: formData.tag as NoteTag,
+    });
   }
 
   function handleCancel() {
     router.back();
   }
+
+  const isPending = mutation.isPending;
 
   return (
     <form className={css.form} onSubmit={handleSubmit}>
@@ -119,3 +136,4 @@ export default function NoteForm() {
     </form>
   );
 }
+
