@@ -28,7 +28,6 @@ export default function NotesClient({ tag }: NotesClientProps) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
-  // ⏳ Debounced search
   const debouncedSearch = useDebounce(search, 400);
 
   const finalSearch =
@@ -72,7 +71,11 @@ export default function NotesClient({ tag }: NotesClientProps) {
         </Link>
       </div>
 
-      <NoteList notes={notes} />
+      {notes.length > 0 ? (
+        <NoteList notes={notes} />
+      ) : (
+        <p>No notes found.</p>
+      )}
 
       <Pagination
         currentPage={page}
