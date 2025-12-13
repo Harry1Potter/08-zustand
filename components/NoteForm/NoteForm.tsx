@@ -18,11 +18,11 @@ export default function NoteForm() {
   const [formData, setFormDataState] = useState(initialDraft);
 
   useEffect(() => {
-    const hasDraft =
-      draft.title.trim() !== "" || draft.content.trim() !== "";
+  const hasDraft =
+    draft.title.trim() !== "" || draft.content.trim() !== "";
 
-    setFormDataState(hasDraft ? draft : initialDraft);
-  }, []);
+  setFormDataState(hasDraft ? draft : initialDraft);
+}, [draft]);
 
   function handleChange(
     e: React.ChangeEvent<
